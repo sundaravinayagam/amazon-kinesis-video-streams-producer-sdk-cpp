@@ -135,6 +135,9 @@ typedef struct _CustomData {
     uint64_t first_pts;
 } CustomData;
 
+string video_name;
+
+
 namespace com { namespace amazonaws { namespace kinesis { namespace video {
 
 class SampleClientCallbackProvider : public ClientCallbackProvider {
@@ -717,7 +720,7 @@ int gstreamer_live_source_init(int argc, char* argv[], CustomData *data, GstElem
 
     /* configure source */
     if (!vtenc) {
-        g_object_set(G_OBJECT (source), "do-timestamp", TRUE, "device", "/dev/video0", NULL);
+        g_object_set(G_OBJECT (source), "do-timestamp", TRUE, "device", video_name.c_str(), NULL);
     }
 
     /* Determine whether device supports h264 encoding and select a streaming resolution supported by the device*/
@@ -1060,6 +1063,7 @@ int main(int argc, char* argv[]) {
 
     data.streamSource = LIVE_SOURCE;
     if (argc > 2) {
+#if 0
         string third_arg = string(argv[2]);
         // config options for live source begin with -
         if (third_arg[0] != '-') {
@@ -1087,6 +1091,8 @@ int main(int argc, char* argv[]) {
                 }
             }
         }
+#endif
+        video_name = string(argv[2]);
     }
 
     /* init Kinesis Video */
